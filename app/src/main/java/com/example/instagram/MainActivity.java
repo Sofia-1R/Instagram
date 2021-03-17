@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     private Button btnSubmit;
     private File photoFile;
     public String photoFileName = "photo.jpg";
+    private Button btnLogout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,9 +46,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         etDescription = findViewById(R.id.etDescription);
-        btnCaptureImage= findViewById(R.id.btCaptureImage);
-        ivPostImage= findViewById(R.id.ivPostImage);
-        btnSubmit= findViewById(R.id.btnSubmit);
+        btnCaptureImage = findViewById(R.id.btCaptureImage);
+        ivPostImage = findViewById(R.id.ivPostImage);
+        btnSubmit = findViewById(R.id.btnSubmit);
+        btnLogout = findViewById(R.id.btnLogout);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,6 +57,22 @@ public class MainActivity extends AppCompatActivity {
                 launchCamera();
             }
         });
+
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                ParseUser.logOut();
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser == null) {
+                    goLogin();
+                }
+            }
+
+
+        });
+
+
 
       //  queryPosts();
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
                 savePost(description, currentUser, photoFile);
             }
         });
+    }
+    private void goLogin() {
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
+        finish();
     }
     private void launchCamera(){
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
